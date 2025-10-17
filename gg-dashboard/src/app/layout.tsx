@@ -1,5 +1,7 @@
 import './globals.css'
+import GoogleOAuthProvider from '../../components/GoogleOAuthProvider'
 
+const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '423505120145-o5jq29p73782bgt5a92c4c0i67a97719.apps.googleusercontent.com'
 
 export default function RootLayout({
   children,
@@ -9,7 +11,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50">
-        {children}
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+          {children}
+        </GoogleOAuthProvider>
       </body>
     </html>
   )

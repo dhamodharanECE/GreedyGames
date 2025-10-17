@@ -1,128 +1,134 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import React, { useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { supabase } from '../lib/supabase'
+import Image1 from '../public/photo.jpeg'
+import Vetor from '../public/Vector.png'
 
-export default function ProfileForm() {
-  const { user, profile } = useAuth()
-  const [name, setName] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+interface User {
+  id: string
+  email: string
+  user_metadata?: {
+    name?: string
+  }
+}
 
-  useEffect(() => {
-    if (profile) {
-      setName(profile.name || '')
-    }
-  }, [profile])
+interface ProfileFormProps {
+  isOpen: boolean
+  onClose: () => void
+  user?: User | null
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!user) return
-
-    setLoading(true)
-    setMessage('')
-
+export default function ProfileForm({ isOpen, onClose, user }: ProfileFormProps) {
+  const router = useRouter()
+  const profilesRef = useRef<HTMLDivElement | null>(null)
+  
+  const handleSignOut = async () => {
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ name: name.trim() })
-        .eq('id', user.id)
-
-      if (error) throw error
-
-      setMessage('Profile updated successfully!')
-    } catch (error) {
-      console.error('Error updating profile:', error)
-      setMessage('Error updating profile. Please try again.')
-    } finally {
-      setLoading(false)
+      await supabase.auth.signOut()
+      router.replace('/login')
+    } catch (error: unknown) {
+      console.error('Sign out error:', error)
     }
   }
 
+  if (!isOpen) return null
+
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="mb-6">
-        <div className="flex items-center space-x-4">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-            {profile?.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt="Profile"
-                className="w-16 h-16 rounded-full"
-              />
-            ) : (
-              <span className="text-2xl text-blue-600 font-semibold">
-                {profile?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase()}
-              </span>
-            )}
+    <div 
+      ref={profilesRef} 
+      className="w-96 bg-white border-l border-gray-200 p-6 fixed right-0 top-0 h-full shadow-lg z-50 flex flex-col transition-transform duration-300 ease-in-out"
+    >
+      {/* Header */} 
+      <div className="flex justify-between items-center pb-4 border-b border-gray-200 mb-6">
+        <h2 className="text-xl font-semibold text-gray-800">Profile</h2>
+        <button 
+          className="text-gray-400 hover:text-gray-600 text-2xl" 
+          onClick={onClose}
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Profile Image + Last Active */}
+      <div className="flex items-center justify-start mb-6 space-x-3">
+        <Image 
+          src={Image1} 
+          alt="Profile" 
+          width={70} 
+          height={70}
+          className="rounded-full border-4 border-red-400"
+        />
+        <div className='space-y-2'>
+          <div className="flex flex-col items-center bg-orange-300 border border-orange-200 rounded-2xl p-2 text-amber-700 space-y-2">
+            <p className="text-sm">Super Admin</p>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              {profile?.name || 'No name set'}
-            </h2>
-            <p className="text-gray-600">{user?.email}</p>
-            <p className="text-sm text-gray-500 capitalize">{profile?.role}</p>
-          </div>
+          <p className="text-sm text-gray-500 gap-1.5">
+            Last active: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} {new Date().toLocaleDateString()}
+          </p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Profile Info Inputs */}
+      <div className="space-y-4 mb-6">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Display Name
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Username
           </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your display name"
+          <input 
+            type="text" 
+            defaultValue={user?.user_metadata?.name || ''} 
+            className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-black-400 focus:outline-none" 
           />
         </div>
-
-      <div>
-  <label htmlFor="email-display" className="block text-sm font-medium text-gray-700 mb-2">
-    Email Address
-  </label>
-  <input
-    id="email-display"
-    name="email-display"
-    type="email"
-    value={user?.email || 'No email available'}
-    disabled
-    aria-disabled="true"
-    aria-describedby="email-help"
-    title="Email address cannot be changed"
-    placeholder="Email address will appear here"
-    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-200"
-  />
-  <p id="email-help" className="mt-1 text-sm text-gray-500">
-    Email address cannot be changed. Contact support if you need to update your email.
-  </p>
-</div>
-
-        {message && (
-          <div className={`p-3 rounded-md ${
-            message.includes('successfully') 
-              ? 'bg-green-50 text-green-800 border border-green-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}>
-            {message}
-          </div>
-        )}
-
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Updating...' : 'Update Profile'}
-          </button>
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Email
+          </label>
+          <input 
+            type="email" 
+            defaultValue={user?.email || ''} 
+            className="w-full border border-gray-300 rounded-lg p-2 cursor-not-allowed" 
+            readOnly 
+          />
         </div>
-      </form>
+      </div>
+
+      {/* Upload Button */}
+      <div className="flex justify-center mb-6">
+        <button className="bg-sky-100 text-green-400 px-6 py-2 rounded-lg font-medium shadow">
+          Upload Profile
+        </button>
+      </div>
+
+      {/* To-Do Stats */}
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="flex flex-col items-center bg-green-50 border border-green-200 rounded-xl p-3">
+          <span className="text-lg font-bold text-green-600">3</span>
+          <p className="text-sm text-gray-600">To-Do</p>
+        </div>
+        <div className="flex flex-col items-center bg-yellow-50 border border-yellow-200 rounded-xl p-3">
+          <span className="text-lg font-bold text-yellow-600">4</span>
+          <p className="text-sm text-gray-600">Pending</p>
+        </div>
+        <div className="flex flex-col items-center bg-blue-50 border border-blue-200 rounded-xl p-3">
+          <span className="text-lg font-bold text-blue-600">2</span>
+          <p className="text-sm text-gray-600">Completed</p>
+        </div>
+      </div>
+
+      {/* Logout Button */}
+      <div className="mt-auto">
+        <button 
+          onClick={handleSignOut} 
+          className="w-full flex items-center justify-center gap-2 text-black py-2 rounded-lg font-semibold shadow"
+        >
+          <Image src={Vetor} alt="logout" width={20} height={20} />
+          Logout
+        </button>
+      </div>
     </div>
   )
 }

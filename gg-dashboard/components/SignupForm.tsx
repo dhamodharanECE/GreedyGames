@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { supabase } from '../lib/supabase'
 import Link from 'next/link'
-import Image from '../public/login.png'
+import loginImage from '../public/login.png'
 
 export default function SignupForm() {
   const [email, setEmail] = useState('')
@@ -45,49 +46,58 @@ export default function SignupForm() {
           router.push('/login')
         }, 3000)
       }
-    } catch (error: any) {
-      setMessage(error.message)
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+      setMessage(errorMessage)
     } finally {
       setLoading(false)
     }
   }
 
   const handleGoogleAuth = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    })
-    
-    if (error) {
-      setMessage(error.message)
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        }
+      })
+      
+      if (error) {
+        setMessage(error.message)
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+      setMessage(errorMessage)
     }
   }
 
   return (
     <div className="h-screen flex overflow-hidden">
       <div className="hidden lg:flex lg:flex-1 relative">
-        <img
-          src={Image.src}
+        <Image
+          src={loginImage}
           alt="Background"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-black/20"></div>
       </div>
 
-      {/* Right Half - Signup Form */}
       <div className="flex-1 flex items-center justify-center p-6 bg-white overflow-hidden">
-        <div className="max-w-md w-full space-y-6 max-h-full overflow-y-auto">
-          {/* Header */}
-          <div className="text-center space-y-3">
-            <h1 className="text-3xl font-bold text-gray-900">GREEDYGAME</h1>
+        <div className="max-w-md w-full space-y-2 max-h-full overflow-y-auto">
+          <div className="text-center space-y-1">
+            <h1 className="text-xl font-bold text-gray-900">GREEDYGAME</h1>
             <h2 className="text-xl font-semibold text-gray-800">Create your GGTodo account</h2>
             <p className="text-gray-600">Get started with your productivity journey</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 space-y-4">
-            {/* Google Signup Button */}
+          <div className="bg-white rounded-2xl p-6 space-y-0">
             <button
               onClick={handleGoogleAuth}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -98,7 +108,6 @@ export default function SignupForm() {
               Sign up with Google
             </button>
 
-            {/* Divider */}
             <div className="relative py-2">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300" />
@@ -107,9 +116,8 @@ export default function SignupForm() {
                 <span className="px-3 bg-white text-gray-500">Or</span>
               </div>
             </div>
-
-            {/* Signup Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="space-y-1">
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Full Name
@@ -121,7 +129,8 @@ export default function SignupForm() {
                   placeholder="Enter your full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  disabled={loading}
                 />
               </div>
 
@@ -137,7 +146,8 @@ export default function SignupForm() {
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  disabled={loading}
                 />
               </div>
 
@@ -153,8 +163,9 @@ export default function SignupForm() {
                   placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   minLength={6}
+                  disabled={loading}
                 />
               </div>
 
@@ -170,8 +181,9 @@ export default function SignupForm() {
                   placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   minLength={6}
+                  disabled={loading}
                 />
               </div>
 
@@ -186,6 +198,41 @@ export default function SignupForm() {
                 </div>
               )}
 
+              <div className="flex items-start space-x-3 pt-2">
+                <div className="flex items-center h-5">
+                  <input
+                    id="agree-policy"
+                    type="checkbox"
+                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                    required
+                    aria-label="I agree to the Terms of Service and Privacy Policy"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="text-sm">
+                  <label htmlFor="agree-policy" className="text-gray-700">
+                    I agree to the{' '}
+                    <a
+                      href="/terms"
+                      className="text-blue-600 hover:text-blue-500"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Terms of Service
+                    </a>{' '}
+                    and{' '}
+                    <a
+                      href="/privacy"
+                      className="text-blue-600 hover:text-blue-500"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Privacy Policy
+                    </a>
+                  </label>
+                </div>
+              </div>
+
               {/* Signup Button */}
               <div className="pt-2">
                 <button
@@ -193,7 +240,14 @@ export default function SignupForm() {
                   disabled={loading}
                   className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
-                  {loading ? 'Creating account...' : 'Sign Up'}
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Creating account...
+                    </span>
+                  ) : (
+                    'Sign Up'
+                  )}
                 </button>
               </div>
 
@@ -201,7 +255,10 @@ export default function SignupForm() {
               <div className="text-center pt-3">
                 <p className="text-sm text-gray-600">
                   Already have an account?{' '}
-                  <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                  <Link 
+                    href="/login" 
+                    className="text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                  >
                     Log in
                   </Link>
                 </p>
@@ -211,5 +268,5 @@ export default function SignupForm() {
         </div>
       </div>
     </div>
-  )
+  ) 
 }

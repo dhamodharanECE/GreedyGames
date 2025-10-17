@@ -1,121 +1,123 @@
 'use client'
+import React, { useState, useRef, useEffect } from 'react'
+import supabase from '../lib/config/supabase'
 
-import { useState, useEffect } from 'react'
-import { useTodos } from '../hooks/useTodos'
+interface Notification {
+  id: number
+  message: string
+  time: string
+  isread?: boolean
+}
 
 export default function Notifications() {
-  const [isOpen, setIsOpen] = useState(false)
-  const { todos } = useTodos()
+  const [notifOpen, setNotifOpen] = useState(true)
+  const notifRef = useRef<HTMLDivElement>(null)
+  const [notification, setNotification] = useState<Notification[]>([])
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const upcomingTodos = todos.filter(todo => {
-    if (todo.completed) return false
-    const dueDate = new Date(todo.due_at)
-    const now = new Date()
-    const hoursUntilDue = (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60)
-    return hoursUntilDue <= 4 && hoursUntilDue > 0
-  })
+  useEffect(() =>{
+    const fetchData = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+      .from('notifications')
+      .select();
+      
+      if(error){
+        setFetchError("Could not fetch data from the server.");
+        setNotification([]);
+        console.log("Error fetching notifications:", error);
+      }
 
-  const completedTodos = todos.filter(todo => todo.completed)
-  const overdueTodos = todos.filter(todo => {
-    if (todo.completed) return false
-    const dueDate = new Date(todo.due_at)
-    const now = new Date()
-    return dueDate < now
-  })
+      if(data){
+        setNotification(data);
+        setFetchError(null);
+        console.log("Fetched notifications:", data);
+      }
+      setLoading(false);
+    }
+    fetchData();
+  }, [])
 
-  const totalNotifications = upcomingTodos.length + completedTodos.length + overdueTodos.length
+  // Close notifications when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setNotifOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM10.24 8.56a5.97 5.97 0 01-3.79 1.17 5.97 5.97 0 01-3.79-1.17 6 6 0 118.58 0z" />
-        </svg>
-        {totalNotifications > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {totalNotifications}
-          </span>
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-          <div className="p-4">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-gray-900">Notifications</h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
+    <>
+      {/* Notifications Panel */}
+      {notifOpen && (
+        <div
+          className="w-96 bg-white border-l border-gray-200 fixed right-0 top-0 h-full shadow-lg z-50 flex flex-col" 
+          ref={notifRef}
+        >
+          {/* Header - Fixed */}
+          <div className="flex-shrink-0 p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-800">Notifications</h2>
+              <div className="flex gap-2">
+                <button 
+                  className="text-gray-400 hover:text-gray-600 text-2xl" 
+                  onClick={() => setNotifOpen(false)}
+                >
+                  ✕
+                </button>
+              </div>
             </div>
+          </div>
+          
+          {/* Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {fetchError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                <p className="text-red-700 text-sm">{fetchError}</p>
+              </div>
+            )}
             
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {overdueTodos.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-red-600 mb-2 flex items-center">
-                    <span className="w-2 h-2 bg-red-600 rounded-full mr-2"></span>
-                    Overdue ({overdueTodos.length})
-                  </h4>
-                  {overdueTodos.map(todo => (
-                    <div key={todo.id} className="text-sm p-3 bg-red-50 rounded-lg mb-2 border border-red-100">
-                      <div className="font-medium text-red-900">🚨 {todo.title}</div>
-                      <div className="text-red-700 text-xs mt-1">
-                        Was due {new Date(todo.due_at).toLocaleString()}
-                      </div>
+            {loading ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              </div>
+            ) : notification.length === 0 ? (
+              <div className="text-center py-8">
+                <svg className="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 17h5l-5 5v-5zM4.083 9h1.946c.089 0 .174.035.237.097l4.586 4.586a.336.336 0 00.475 0l4.586-4.586a.336.336 0 01.237-.097h1.946c.089 0 .174.035.237.097l.828.828a.336.336 0 01.097.237v6.728a.336.336 0 01-.097.237l-.828.828a.336.336 0 01-.237.097H4.083a.336.336 0 01-.237-.097l-.828-.828a.336.336 0 01-.097-.237V10.162c0-.089.035-.174.097-.237l.828-.828A.336.336 0 014.083 9z" />
+                </svg>
+                <p className="text-gray-500">No notifications yet.</p>
+              </div>
+            ) : (
+              <ul className="space-y-3">
+                {notification.map(notif => (
+                  <li 
+                    key={notif.id} 
+                    className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                      notif.isread 
+                        ? 'bg-gray-50 border-gray-200' 
+                        : 'bg-blue-50 border-blue-200'
+                    }`}
+                  >
+                    <p className="text-gray-700 text-sm">{notif.message}</p>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-gray-400 text-xs">{notif.time}</span>
+                      {!notif.isread && (
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                      )}
                     </div>
-                  ))}
-                </div>
-              )}
-
-              {upcomingTodos.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-orange-600 mb-2 flex items-center">
-                    <span className="w-2 h-2 bg-orange-600 rounded-full mr-2"></span>
-                    Upcoming ({upcomingTodos.length})
-                  </h4>
-                  {upcomingTodos.map(todo => (
-                    <div key={todo.id} className="text-sm p-3 bg-orange-50 rounded-lg mb-2 border border-orange-100">
-                      <div className="font-medium text-orange-900">⏰ {todo.title}</div>
-                      <div className="text-orange-700 text-xs mt-1">
-                        Due {new Date(todo.due_at).toLocaleString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {completedTodos.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-green-600 mb-2 flex items-center">
-                    <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-                    Completed ({completedTodos.length})
-                  </h4>
-                  {completedTodos.map(todo => (
-                    <div key={todo.id} className="text-sm p-3 bg-green-50 rounded-lg mb-2 border border-green-100">
-                      <div className="font-medium text-green-900">✅ {todo.title}</div>
-                      <div className="text-green-700 text-xs mt-1">
-                        Completed {new Date(todo.updated_at).toLocaleString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {totalNotifications === 0 && (
-                <div className="text-center py-8">
-                  <div className="text-gray-400 text-4xl mb-2">🎉</div>
-                  <p className="text-gray-500 text-sm">All caught up! No notifications.</p>
-                </div>
-              )}
-            </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }

@@ -1,144 +1,193 @@
 'use client'
-
+import React from 'react'
 import { useState } from 'react'
-import { supabase } from '../lib/supabase'
-import { useAuth } from '../hooks/useAuth'
-
 interface TodoFormProps {
-  onSuccess: () => void
+  isOpen: boolean
+  onClose: () => void
+  editingTodoId: number | null
+  onSave: (todo: {
+    title: string
+    description: string
+    date: string
+    time: string
+    status: 'Upcoming' | 'Completed'
+  }) => void
+  initialData?: {
+    title: string
+    description: string
+    date: string
+    time: string
+    status: 'Upcoming' | 'Completed'
+  }
 }
 
-export default function TodoForm({ onSuccess }: TodoFormProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [dueAt, setDueAt] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { user } = useAuth()
+export default function TodoForm({ 
+  isOpen, 
+  onClose, 
+  editingTodoId, 
+  onSave,
+  initialData 
+}: TodoFormProps) {
+    const [newTitle, setNewTitle] = useState(initialData?.title || '')
+    const [newDescription, setNewDescription] = useState(initialData?.description || '')
+    const [newDate, setNewDate] = useState(initialData?.date || '')
+    const [newTime, setNewTime] = useState(initialData?.time || '')
+    const [status, setStatus] = useState<'Upcoming' | 'Completed'>(initialData?.status || 'Upcoming')
+    const [errors, setErrors] = useState<{ [key: string]: string }>({})
+    // const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!user || !title.trim() || !dueAt) return
+    // const id = useParams()
 
-    setLoading(true)
-    try {
-      const { error } = await supabase.from('todos').insert([
-        {
-          title: title.trim(),
-          description: description.trim(),
-          due_at: dueAt,
-          user_id: user.id,
-        },
-      ])
+    // useEffect(()=>{
+    //       const fetechdata = async () =>{
+    //         const {data, error} = await project.from('projects').select('title, description, date, time, status').eq('id', id.id).single();
+    //       if(error){
+    //         console.log("Something went wrong");
+    //         setError("Failed to fetch todo data");
+    //       }
+    //       if(data){
+    //         console.log(data);
+    //         setNewTitle(errors.title);
+    //         setNewDescription(errors.description);
+    //         setNewDate(errors.date);
+    //         setNewTime(errors.time);
+    //         setStatus(errors.status);
+    //       }
+    //       fetechdata();
+    //     }
+        
+    // }, []);
 
-      if (error) throw error
+    const handleSave = () => {
+        const newErrors: { [key: string]: string } = {}
 
-      setTitle('')
-      setDescription('')
-      setDueAt('')
-      setIsOpen(false)
-      onSuccess()
-    } catch (error) {
-      console.error('Error creating todo:', error)
-      alert('Error creating todo. Please try again.')
-    } finally {
-      setLoading(false)
+        // Validate fields
+        if (!newTitle.trim()) {
+            newErrors.title = 'Title is required'
+        }
+        if (!newDescription.trim()) {
+            newErrors.description = 'Description is required'
+        }
+        if (!newDate) {
+            newErrors.date = 'Due date is required'
+        }
+        if (!newTime) {
+            newErrors.time = 'Due time is required'
+        }
+
+        // If there are errors, set them and return
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors)
+            return
+        }
+
+        // Clear errors and save
+        setErrors({})
+        onSave({
+            title: newTitle,
+            description: newDescription,
+            date: newDate,
+            time: newTime,
+            status: status
+        })
     }
-  }
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
-      >
-        <span>+</span>
-        <span>New Todo</span>
-      </button>
-    )
-  }
+    // Clear error when user starts typing
+    const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>, field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setter(e.target.value)
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: '' }))
+        }
+    }
 
+    if (!isOpen) return null
+    
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-        <div className="p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Create New Todo</h2>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title *
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="What needs to be done?"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Add some details..."
-                rows={3}
-              />
-            </div>
-            <div>
-  <label htmlFor="due-date" className="block text-sm font-medium text-gray-700 mb-1">
-    Due Date and Time *
-    <span className="text-red-500 ml-1" aria-hidden="true">*</span>
-  </label>
-  <input
-    id="due-date"
-    name="due-date"
-    type="datetime-local"
-    value={dueAt}
-    onChange={(e) => setDueAt(e.target.value)}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-    required
-    min={new Date().toISOString().slice(0, 16)}
-    aria-required="true"
-    aria-describedby="due-date-help due-date-format"
-    title="Select the due date and time for your todo item"
-    step="300" 
-  />
-  <div className="flex justify-between mt-1">
-    <p id="due-date-help" className="text-sm text-gray-500">
-      Select when this todo should be completed
-    </p>
-    <p id="due-date-format" className="text-sm text-gray-400">
-      Format: YYYY-MM-DD HH:MM
-    </p>
-  </div>
-</div>
-
-            <div className="flex space-x-3 pt-4">
-              <button
-                type="submit"
-                disabled={loading || !title.trim() || !dueAt}
-                className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+    <>
+      <div className="w-96 bg-white border-l border-gray-200 p-6 fixed right-0 top-0 h-full shadow-lg z-50 flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-gray-800">
+                {editingTodoId ? 'Edit Todo' : 'Add Todo'}
+              </h2>
+              <button 
+                className="text-gray-400 hover:text-gray-600 text-2xl" 
+                onClick={onClose}
               >
-                {loading ? 'Creating...' : 'Create Todo'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-md hover:bg-gray-400"
-              >
-                Cancel
+                ✕
               </button>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
+
+            <div className="space-y-4 flex-1">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Title<span className='text-red-700 text-xl'>*</span></label>
+                <input 
+                  type="text" 
+                  value={newTitle} 
+                  onChange={handleInputChange(setNewTitle, 'title')} 
+                  className={`w-full border rounded-lg p-2 ${
+                    errors.title ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="Enter todo title"
+                />
+                {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Description<span className='text-red-700 text-xl'>*</span></label>
+                <textarea 
+                  value={newDescription} 
+                  onChange={handleInputChange(setNewDescription, 'description')} 
+                  className={`w-full border rounded-lg p-2 ${
+                    errors.description ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="Enter todo description"
+                  rows={4}
+                />
+                {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Due Date <span className='text-red-700 text-xl'>*</span></label>
+                <input 
+                  type="date" 
+                  value={newDate} 
+                  onChange={handleInputChange(setNewDate, 'date')} 
+                  className={`w-full border rounded-lg p-2 ${
+                    errors.date ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Due Time<span className='text-red-700 text-xl'>*</span></label>
+                <input 
+                  type="time" 
+                  value={newTime} 
+                  onChange={handleInputChange(setNewTime, 'time')} 
+                  className={`w-full border rounded-lg p-2 ${
+                    errors.time ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {errors.time && <p className="text-red-500 text-xs mt-1">{errors.time}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Status<span className='text-red-700 text-xl'>*</span></label>
+                <select 
+                  value={status} 
+                  onChange={(e) => setStatus(e.target.value as 'Upcoming' | 'Completed')}
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                >
+                  <option value="Upcoming">Upcoming</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+
+            <button 
+              onClick={handleSave} 
+              className="mt-4 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg"
+            >
+              {editingTodoId ? 'Update Todo' : '+ Add Todo'}
+            </button>
+          </div>
+    </>
   )
 }
