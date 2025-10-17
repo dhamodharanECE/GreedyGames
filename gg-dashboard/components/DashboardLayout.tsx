@@ -19,7 +19,7 @@ import searchIcon from '../public/searchIcon.jpeg'
 import Notifications from './Notifications'
 import ProfileForm from './ProfileForm'
 import TodoForm from './TodoForm'
-import project from '../lib/project/project'
+import {project} from '../lib/project/project'
 
 interface User {
   id: string

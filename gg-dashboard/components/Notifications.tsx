@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
-import supabase from '../lib/config/supabase'
+import {supabases} from '../lib/config/supabases'
 
 interface Notification {
   id: number
@@ -19,7 +19,7 @@ export default function Notifications() {
   useEffect(() =>{
     const fetchData = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await supabases
       .from('notifications')
       .select();
       
