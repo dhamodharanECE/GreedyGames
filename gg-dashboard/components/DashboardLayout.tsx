@@ -15,12 +15,14 @@ import box from '../public/box.png'
 import userdata from '../public/user.png'
 import list from '../public/list.png'
 import close from '../public/close.png'
-import searchIcon from '../public/searchIcon.jpeg' 
+import searchIcon from '../public/searchIcon.jpeg' // Add search icon import
 import Notifications from './Notifications'
+import Link from 'next/link'
 import ProfileForm from './ProfileForm'
 import TodoForm from './TodoForm'
-import {project} from '../lib/project/project'
+import { project } from '../src/app/lib/project/project'
 
+// Define proper TypeScript interfaces
 interface User {
   id: string
   email: string
@@ -73,16 +75,16 @@ export default function Dashboard() {
   useEffect(() =>{
     const fetchData = async () => {
       setLoadingProjects(true);
-      const { data, error } = await project
+      const { data, error } = await project()
       .from('projects')
-      .select();
+      .select('*');
       
       if(error){
         setFetchError("Could not fetch data from the server.");
         setSampleTodos([]);
         console.log("Error fetching projects:", error);
       }
-      
+
       if(data){
         setSampleTodos(data);
         setFetchError(null);
@@ -92,11 +94,8 @@ export default function Dashboard() {
     }
     fetchData();
   }, [])
-  
-  console.log('Supabase loading state:', loadingProjects)
-  console.log("Supabase fetching projects:", fetchError);
+
   const closeMenu = () => setMenuOpen(false)  
-  // const closeProfile = () => setProfileOpen(false)
 
   // Check user authentication
   const checkUser = useCallback(async () => {
@@ -343,8 +342,8 @@ export default function Dashboard() {
               <Image 
                 src={searchIcon} 
                 alt="Search" 
-                width={25} 
-                height={25} 
+                width={16} 
+                height={16} 
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               />
             </div>
@@ -441,9 +440,9 @@ export default function Dashboard() {
                 Last Updated: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} {new Date().toLocaleDateString()}
               </p>
               {searchQuery && (
-               <p className="text-sm text-green-600 mt-1">
-                  Showing {todos.length} results for &quot;{searchQuery}&quot;
-               </p>
+                <p className="text-sm text-green-600 mt-1">
+                  Showing {todos.length} results for "{searchQuery}"
+                </p>
               )}
             </div>
 

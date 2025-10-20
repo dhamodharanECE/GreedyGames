@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
-import {supabases} from '../lib/config/supabases'
+import { createSupabaseClient } from '../src/app/lib/config/nodata'
 
 interface Notification {
   id: number
@@ -19,8 +19,7 @@ export default function Notifications() {
   useEffect(() =>{
     const fetchData = async () => {
       setLoading(true);
-      const { data, error } = await supabases
-      .from('notifications')
+      const { data, error } = await createSupabaseClient().from('notifications')
       .select();
       
       if(error){

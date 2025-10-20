@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../src/app/lib/supabase'
 import Link from 'next/link'
 import loginImage from '../public/login.png'
 
@@ -15,7 +15,6 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
