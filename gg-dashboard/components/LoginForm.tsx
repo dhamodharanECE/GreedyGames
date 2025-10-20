@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '../supabase/client'
 import Link from 'next/link'
+import { SupabaseClient } from '@supabase/supabase-js'
 
 export default function LoginForm() {
   const [email, setEmail] = useState('')
@@ -14,12 +15,18 @@ export default function LoginForm() {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [checkingAuth, setCheckingAuth] = useState(true)
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null)
   const router = useRouter()
   
-  // Use the new Supabase client
-  const supabase = createClient()
+  // Initialize Supabase only on client side
+  useEffect(() => {
+    const client = createClient()
+    setSupabase(client)
+  }, [])
 
   const checkAuthState = useCallback(async () => {
+    if (!supabase) return
+    
     try {
       const { data: { session } } = await supabase.auth.getSession()
       
@@ -32,61 +39,21 @@ export default function LoginForm() {
     } finally {
       setCheckingAuth(false)
     }
-  }, [supabase.auth, router])
+  }, [supabase, router])
 
   useEffect(() => {
-    checkAuthState()
-  }, [checkAuthState])
-
-  // useEffect(() => {
-  // //   // Handle OAuth callback errors from URL parameters
-
-    
-  
-
-  //   // Also check for hash fragments (common OAuth issue)
-   
-      
-  //     if (hashError) {
-  //       handleAuthError('hash_error', hashErrorDescription || hashError)
-  //       // Clean up the URL
-  //       window.history.replaceState(null, '', window.location.pathname + window.location.search)
-  //     }
-  //   }
-  // }, [])
-
-  // const handleAuthError = (errorType: string, errorMessage: string) => {
-  //   switch (errorType) {
-  //     case 'auth_failed':
-  //       if (errorMessage.includes('code verifier')) {
-  //         setMessage('Session expired. Please clear your browser cache and try again.')
-  //       } else {
-  //         setMessage(`Authentication failed: ${errorMessage}`)
-  //       }
-  //       break
-  //     case 'pkce_error':
-  //       setMessage('Authentication session expired. Please clear your browser cache and try again.')
-  //       break
-  //     case 'no_code':
-  //       setMessage('Authentication failed: No authorization code received.')
-  //       break
-  //     case 'access_denied':
-  //       setMessage('Login was canceled. Please try again.')
-  //       break
-  //     case 'oauth_error':
-  //     case 'hash_error':
-  //       setMessage(`Google login error: ${errorMessage}`)
-  //       break
-  //     case 'unexpected_error':
-  //       setMessage(`Unexpected error: ${errorMessage}`)
-  //       break
-  //     default:
-  //       setMessage(`Login error: ${errorMessage}`)
-  //   }
-  // }
+    if (supabase) {
+      checkAuthState()
+    }
+  }, [supabase, checkAuthState])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!supabase) {
+      setMessage('Client not initialized. Please refresh the page.')
+      return
+    }
+    
     setLoading(true)
     setMessage('')
 
@@ -97,7 +64,6 @@ export default function LoginForm() {
       })
       
       if (error) {
-        // Handle email not confirmed error
         if (error.message.includes('Email not confirmed')) {
           setMessage('Please check your email and confirm your account before logging in.')
         } else {
@@ -107,10 +73,8 @@ export default function LoginForm() {
         console.log('Email login successful')
         console.log('Email confirmed:', data.user?.email_confirmed_at)
         
-        // Check if email is confirmed
         if (!data.user?.email_confirmed_at) {
           setMessage('Welcome! Please check your email to confirm your account for full access.')
-          // Still redirect to dashboard but show warning
         }
         
         router.replace('/dashboard')
@@ -124,6 +88,11 @@ export default function LoginForm() {
   }
 
   const handleGoogleAuth = async () => {
+    if (!supabase) {
+      setMessage('Client not initialized. Please refresh the page.')
+      return
+    }
+    
     setGoogleLoading(true)
     setMessage('')
     
@@ -158,7 +127,6 @@ export default function LoginForm() {
         }
       } else {
         console.log('✅ Google OAuth initiated successfully')
-        // The redirect happens automatically via Supabase
       }
     } catch (error: unknown) {
       console.error('💥 Google OAuth exception:', error)
@@ -170,6 +138,11 @@ export default function LoginForm() {
   }
 
   const handleForgotPassword = async () => {
+    if (!supabase) {
+      setMessage('Client not initialized. Please refresh the page.')
+      return
+    }
+    
     if (!email) {
       setMessage('Please enter your email address to reset password')
       return
@@ -197,6 +170,11 @@ export default function LoginForm() {
   }
 
   const handleResendConfirmation = async () => {
+    if (!supabase) {
+      setMessage('Client not initialized. Please refresh the page.')
+      return
+    }
+    
     if (!email) {
       setMessage('Please enter your email address to resend confirmation')
       return
@@ -233,13 +211,13 @@ export default function LoginForm() {
     }
   }
 
-  // Show loading while checking auth state
-  if (checkingAuth) {
+  // Show loading while checking auth state OR before supabase is initialized
+  if (checkingAuth || !supabase) {
     return (
       <div className="h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     )
@@ -356,7 +334,7 @@ export default function LoginForm() {
             {/* Message Display */}
             {message && (
               <div className={`p-3 rounded-lg border ${
-                message.includes('failed') || message.includes('error') || message.includes('canceled') || message.includes('expired')
+                message.includes('failed') || message.includes('error') || message.includes('canceled') || message.includes('expired') || message.includes('not initialized')
                   ? 'bg-red-50 border-red-200 text-red-600'
                   : message.includes('sent') || message.includes('Welcome')
                   ? 'bg-green-50 border-green-200 text-green-600'
