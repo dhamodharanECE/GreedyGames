@@ -17,7 +17,6 @@ import list from '../public/list.png'
 import close from '../public/close.png'
 import searchIcon from '../public/searchIcon.jpeg' // Add search icon import
 import Notifications from './Notifications'
-import Link from 'next/link'
 import ProfileForm from './ProfileForm'
 import TodoForm from './TodoForm'
 import { project } from '../src/app/lib/project/project'
@@ -71,7 +70,8 @@ export default function Dashboard() {
   const [sampleTodos, setSampleTodos] = useState<Todo[]>([])
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
-
+  console.log(loadingProjects);
+  console.log(fetchError);
   useEffect(() =>{
     const fetchData = async () => {
       setLoadingProjects(true);
@@ -439,9 +439,9 @@ export default function Dashboard() {
               <p className="text-sm text-gray-500">
                 Last Updated: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} {new Date().toLocaleDateString()}
               </p>
-              {searchQuery && (
+              {searchQuery && todos.length > 0 && (
                 <p className="text-sm text-green-600 mt-1">
-                  Showing {todos.length} results for "{searchQuery}"
+                  Showing {todos.length} result{todos.length !== 1 ? 's' : ''} for &quot;{searchQuery}&quot;
                 </p>
               )}
             </div>

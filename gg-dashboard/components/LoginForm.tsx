@@ -39,16 +39,13 @@ export default function LoginForm() {
   }, [checkAuthState])
 
   // useEffect(() => {
-  //   // Handle OAuth callback errors from URL parameters
+  // //   // Handle OAuth callback errors from URL parameters
 
     
   
 
   //   // Also check for hash fragments (common OAuth issue)
-  //   if (window.location.hash) {
-  //     const hashParams = new URLSearchParams(window.location.hash.substring(1))
-  //     const hashError = hashParams.get('error')
-  //     const hashErrorDescription = hashParams.get('error_description')
+   
       
   //     if (hashError) {
   //       handleAuthError('hash_error', hashErrorDescription || hashError)
@@ -56,37 +53,37 @@ export default function LoginForm() {
   //       window.history.replaceState(null, '', window.location.pathname + window.location.search)
   //     }
   //   }
-  // }, [searchParams])
+  // }, [])
 
-  const handleAuthError = (errorType: string, errorMessage: string) => {
-    switch (errorType) {
-      case 'auth_failed':
-        if (errorMessage.includes('code verifier')) {
-          setMessage('Session expired. Please clear your browser cache and try again.')
-        } else {
-          setMessage(`Authentication failed: ${errorMessage}`)
-        }
-        break
-      case 'pkce_error':
-        setMessage('Authentication session expired. Please clear your browser cache and try again.')
-        break
-      case 'no_code':
-        setMessage('Authentication failed: No authorization code received.')
-        break
-      case 'access_denied':
-        setMessage('Login was canceled. Please try again.')
-        break
-      case 'oauth_error':
-      case 'hash_error':
-        setMessage(`Google login error: ${errorMessage}`)
-        break
-      case 'unexpected_error':
-        setMessage(`Unexpected error: ${errorMessage}`)
-        break
-      default:
-        setMessage(`Login error: ${errorMessage}`)
-    }
-  }
+  // const handleAuthError = (errorType: string, errorMessage: string) => {
+  //   switch (errorType) {
+  //     case 'auth_failed':
+  //       if (errorMessage.includes('code verifier')) {
+  //         setMessage('Session expired. Please clear your browser cache and try again.')
+  //       } else {
+  //         setMessage(`Authentication failed: ${errorMessage}`)
+  //       }
+  //       break
+  //     case 'pkce_error':
+  //       setMessage('Authentication session expired. Please clear your browser cache and try again.')
+  //       break
+  //     case 'no_code':
+  //       setMessage('Authentication failed: No authorization code received.')
+  //       break
+  //     case 'access_denied':
+  //       setMessage('Login was canceled. Please try again.')
+  //       break
+  //     case 'oauth_error':
+  //     case 'hash_error':
+  //       setMessage(`Google login error: ${errorMessage}`)
+  //       break
+  //     case 'unexpected_error':
+  //       setMessage(`Unexpected error: ${errorMessage}`)
+  //       break
+  //     default:
+  //       setMessage(`Login error: ${errorMessage}`)
+  //   }
+  // }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
