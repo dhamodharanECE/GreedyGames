@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { createClient } from '../supabase/client'
+import { SupabaseClient } from '@supabase/supabase-js' // Add this import
 import Image1 from '../public/photo.jpeg'
 import Image2 from '../public/notif.jpeg'
 import profile from '../public/profile.jpg'
@@ -15,7 +16,7 @@ import box from '../public/box.png'
 import userdata from '../public/user.png'
 import list from '../public/list.png'
 import close from '../public/close.png'
-import searchIcon from '../public/searchIcon.jpeg' // Add search icon import
+import searchIcon from '../public/searchIcon.jpeg'
 import Notifications from './Notifications'
 import ProfileForm from './ProfileForm'
 import TodoForm from './TodoForm'
@@ -40,7 +41,7 @@ interface Todo {
 
 export default function Dashboard() {
   const router = useRouter()
-  const supabase = createClient()
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null) // Use proper type instead of any
 
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
@@ -59,46 +60,58 @@ export default function Dashboard() {
   const [newStatus, setNewStatus] = useState<'Upcoming' | 'Completed'>('Upcoming')
 
   const [filterMode, setFilterMode] = useState<'all' | 'upcoming-first' | 'completed-first'>('all')
-  const [searchQuery, setSearchQuery] = useState('') // Add search query state
+  const [searchQuery, setSearchQuery] = useState('')
 
   const profileRef = useRef<HTMLDivElement>(null)
   const notifRef = useRef<HTMLDivElement>(null)
   const profilesRef = useRef<HTMLDivElement | null>(null)
   const originalTodosRef = useRef<Todo[]>([])
 
-  // Sample Todos - moved inside component to avoid dependency issue
+  // Sample Todos
   const [sampleTodos, setSampleTodos] = useState<Todo[]>([])
-  const [loadingProjects, setLoadingProjects] = useState(false);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  console.log(loadingProjects);
-  console.log(fetchError);
-  useEffect(() =>{
+  const [loadingProjects, setLoadingProjects] = useState(false)
+  const [fetchError, setFetchError] = useState<string | null>(null)
+  
+  console.log(loadingProjects)
+  console.log(fetchError)
+
+  // Initialize Supabase client on component mount
+  useEffect(() => {
+    const client = createClient()
+    setSupabase(client)
+  }, [])
+
+  useEffect(() => {
     const fetchData = async () => {
-      setLoadingProjects(true);
-      const { data, error } = await project()
-      .from('projects')
-      .select('*');
+      if (!supabase) return // Wait for supabase to be initialized
       
-      if(error){
-        setFetchError("Could not fetch data from the server.");
-        setSampleTodos([]);
-        console.log("Error fetching projects:", error);
+      setLoadingProjects(true)
+      const { data, error } = await project()
+        .from('projects')
+        .select('*')
+      
+      if (error) {
+        setFetchError("Could not fetch data from the server.")
+        setSampleTodos([])
+        console.log("Error fetching projects:", error)
       }
 
-      if(data){
-        setSampleTodos(data);
-        setFetchError(null);
-        console.log("Fetched projects:", data);
+      if (data) {
+        setSampleTodos(data)
+        setFetchError(null)
+        console.log("Fetched projects:", data)
       }
-      setLoadingProjects(false);
+      setLoadingProjects(false)
     }
-    fetchData();
-  }, [])
+    fetchData()
+  }, [supabase]) // Add supabase as dependency
 
   const closeMenu = () => setMenuOpen(false)  
 
   // Check user authentication
   const checkUser = useCallback(async () => {
+    if (!supabase) return // Add null check
+    
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) router.replace('/login')
@@ -108,14 +121,19 @@ export default function Dashboard() {
     } finally {
       setLoading(false)
     }
-  }, [supabase.auth, router])
+  }, [supabase, router]) // Add supabase to dependencies
 
   // Lifecycle
   useEffect(() => {
-    checkUser()
+    if (supabase) { // Only check user when supabase is available
+      checkUser()
+    }
+  }, [supabase, checkUser])
+
+  useEffect(() => {
     setTodos(sampleTodos)
     originalTodosRef.current = sampleTodos
-  }, [checkUser, sampleTodos])
+  }, [sampleTodos])
 
   // Click outside handler
   useEffect(() => {
@@ -129,6 +147,11 @@ export default function Dashboard() {
   }, [])
 
   const handleSignOut = async () => {
+    if (!supabase) { // Add null check
+      console.error('Supabase client not initialized')
+      return
+    }
+    
     try {
       await supabase.auth.signOut()
       router.replace('/login')
@@ -136,6 +159,9 @@ export default function Dashboard() {
       console.error('Sign out error:', error)
     }
   }
+
+  // Rest of your component remains the same...
+  // [All the other functions and JSX remain exactly the same as in your previous code]
 
   // Sidebar toggle
   const toggleSidebar = () => setIsOpen(!isOpen)
@@ -146,8 +172,7 @@ export default function Dashboard() {
   const handleSearch = (query: string) => {
     setSearchQuery(query)
     if (!query.trim()) {
-      // If search is empty, show all todos
-      handleFilter() // Apply current filter
+      handleFilter()
       return
     }
 
@@ -156,7 +181,6 @@ export default function Dashboard() {
       todo.description.toLowerCase().includes(query.toLowerCase())
     )
     
-    // Apply current filter mode to search results
     if (filterMode !== 'all') {
       const orderUpcomingFirst: Record<string, number> = { Upcoming: 1, Completed: 2 }
       const orderCompletedFirst: Record<string, number> = { Completed: 1, Upcoming: 2 }
@@ -187,7 +211,6 @@ export default function Dashboard() {
 
     let todosToFilter = originalTodosRef.current
     
-    // Apply search filter if there's a search query
     if (searchQuery.trim()) {
       todosToFilter = originalTodosRef.current.filter(todo =>
         todo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -280,11 +303,16 @@ export default function Dashboard() {
     originalTodosRef.current = updatedOriginalTodos
   }
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      Loading...
-    </div>
-  )
+  if (loading || !supabase) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-800 font-sans scroll-m-4">
