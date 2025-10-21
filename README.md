@@ -106,6 +106,12 @@ env
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/e10ab9de-ac34-4850-8837-744b77bb8459" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/936e5f25-1f36-47a9-9c2a-f56e1994f634" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/0d5e851e-453f-414a-aa3e-dc96e294a048" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/e0db6fa7-eed9-4231-a749-10f02f74a758" />
+
+
 
 # Google OAuth (Optional for local development)
 GOOGLE_CLIENT_ID=your-google-client-id
