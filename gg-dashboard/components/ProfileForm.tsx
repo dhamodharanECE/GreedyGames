@@ -25,14 +25,19 @@ export default function ProfileForm({ isOpen, onClose, user }: ProfileFormProps)
   const router = useRouter()
   const profilesRef = useRef<HTMLDivElement | null>(null)
   
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      router.replace('/login')
-    } catch (error: unknown) {
-      console.error('Sign out error:', error)
-    }
+ const handleSignOut = async () => {
+  if (!supabase) {
+    console.error('Supabase client not initialized');
+    return;
   }
+
+  try {
+    await supabase.auth.signOut();
+    router.replace('/login');
+  } catch (error: unknown) {
+    console.error('Sign out error:', error);
+  }
+};
 
   if (!isOpen) return null
 

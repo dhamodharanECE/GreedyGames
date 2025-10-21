@@ -17,7 +17,10 @@ export default function SignupForm() {
   const router = useRouter()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+    if (!supabase) {
+      console.error('Supabase client is not initialized');
+      return;
+    }
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
       return
@@ -52,24 +55,28 @@ export default function SignupForm() {
       setLoading(false)
     }
   }
-
   const handleGoogleAuth = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        }
-      })
-      
-      if (error) {
-        setMessage(error.message)
-      }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
-      setMessage(errorMessage)
-    }
+  if (!supabase) {
+    setMessage('Supabase client not initialized');
+    return;
   }
+
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      }
+    });
+    
+    if (error) {
+      setMessage(error.message);
+    }
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    setMessage(errorMessage);
+  }
+};
 
   return (
     <div className="h-screen flex overflow-hidden">
