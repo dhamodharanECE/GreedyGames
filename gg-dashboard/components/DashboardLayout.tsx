@@ -2,24 +2,24 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import Image from 'next/image';
 import { createClient } from '../supabase/client'
-import { SupabaseClient } from '@supabase/supabase-js' // Add this import
-import Image1 from '../public/photo.jpeg'
-import Image2 from '../public/notif.jpeg'
-import profile from '../public/profile.jpg'
-import down from '../public/down.png'
-import Vetor from '../public/Vector.png'
-import pen from '../public/pen.png'
-import del from '../public/del.jpg'
-import box from '../public/box.png'
-import userdata from '../public/user.png'
-import list from '../public/list.png'
-import close from '../public/close.png'
-import searchIcon from '../public/searchIcon.jpeg'
+import { SupabaseClient } from '@supabase/supabase-js' 
+import Image1 from '../public/photo.jpeg';
+import notif from '../public/notif.jpeg';
+import profile from '../public/profile.jpg';
+import down from '../public/down.png';
+import Vector  from '../public/Vector.png';
+import pen from '../public/pen.png';
+import del from '../public/del.jpg';
+import box from '../public/box.png';
+import userdata from '../public/user.png';
+import list from '../public/list.png';
+import close from '../public/close.png';
+import searchIcon from '../public/searchIcon.jpeg';
 import Notifications from './Notifications'
-import ProfileForm from './ProfileForm'
-import TodoForm from './TodoForm'
+import ProfileForm from './ProfileForm';
+import TodoForm from './TodoForm';
 import { project } from '../src/app/lib/project/project'
 
 // Define proper TypeScript interfaces
@@ -380,7 +380,7 @@ export default function Dashboard() {
           <div className="flex items-center space-x-6">
             <button onClick={toggleNotif} className="cursor-pointer">
               <Image 
-                src={Image2} 
+                src={notif} 
                 alt="notif" 
                 width={40} 
                 height={40} 
@@ -420,7 +420,7 @@ export default function Dashboard() {
                     }}
                     className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
                   >
-                    <Image src={Vetor} alt="logout" width={20} height={20} />
+                    <Image src={Vector} alt="logout" width={20} height={20} />
                     <span>Logout</span>
                   </div>
                 </div>
