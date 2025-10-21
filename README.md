@@ -114,6 +114,9 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/195ddc0c-b8f9-46c6-b6f0-7cfcca5d055a" />
 
 # Next.js Configuration
+
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/b862a1f4-875a-411b-af67-eb9302531c82" />
+
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-nextauth-secret
 4️⃣ Supabase Setup
