@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { supabase } from '../src/app/lib/supabase'
+import { supabase } from '../src/app/lib/subabase'
 import Link from 'next/link'
 import loginImage from '../public/login.png'
 

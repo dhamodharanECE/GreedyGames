@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image';
-import { createClient } from '../supabase/client'
+import { createClient } from '../src/supabase/client'
 import { SupabaseClient } from '@supabase/supabase-js' 
 import Image1 from '../public/photo.jpeg';
 import notif from '../public/notif.jpeg';
@@ -370,8 +370,8 @@ export default function Dashboard() {
               <Image 
                 src={searchIcon} 
                 alt="Search" 
-                width={16} 
-                height={16} 
+                width={26} 
+                height={26} 
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               />
             </div>
