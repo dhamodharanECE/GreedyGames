@@ -10,8 +10,9 @@ export async function GET(req: Request) {
   if (!code) {
     return NextResponse.redirect(new URL('/login?error=no_code', url.origin))
   }
-
+  
   const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+  console.log(data)
   if (error) {
     console.error(error)
     return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, url.origin))
