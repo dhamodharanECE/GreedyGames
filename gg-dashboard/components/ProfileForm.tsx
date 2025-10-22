@@ -3,7 +3,7 @@
 import React, { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { supabase } from '../src/app/lib/subabase'
+import { supabase } from '../src/app/lib/page'
 import Image1 from '../public/photo.jpeg'
 import Vetor from '../public/Vector.png'
 

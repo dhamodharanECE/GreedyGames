@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
-import { createSupabaseClient } from '../src/app/lib/config/nodata'
+import { createSupabaseClient } from '../src/app/lib/config/page'
 
 interface Notification {
   id: number

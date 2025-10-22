@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image';
-import { createClient } from '../src/supabase/client'
+import { createClient } from '../src/supabase/client/page'
 import { SupabaseClient } from '@supabase/supabase-js' 
 import Image1 from '../public/photo.jpeg';
 import notif from '../public/notif.jpeg';
