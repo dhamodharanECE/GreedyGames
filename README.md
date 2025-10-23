@@ -49,44 +49,7 @@ Deployment	Docker
 Language	TypeScript
 State Management	React Context / Zustand
 Icons	Lucide React / Heroicons
-📁 Project Structure
-text
-📦 dashboard-app/
-├── 📂 app/
-│   ├── 📂 auth/
-│   │   ├── 📜 login/
-│   │   │   └── 📜 page.tsx
-│   │   ├── 📜 signup/
-│   │   │   └── 📜 page.tsx
-│   │   └── 📜 layout.tsx
-│   ├── 📂 dashboard/
-│   │   ├── 📜 page.tsx
-│   │   ├── 📂 notification/
-│   │   │   └── 📜 page.tsx
-│   │   └── 📜 layout.tsx
-│   └── 📜 layout.tsx
-├── 📂 components/
-│   ├── 📜 DashboardLayout.tsx
-│   ├── 📜 Notifications.tsx
-│   ├── 📜 ProfileMenu.tsx
-│   ├── 📜 AuthForm.tsx
-│   └── 📜 ProtectedRoute.tsx
-├── 📂 lib/
-│   └── 📂 supabase/
-│       ├── 📜 client.ts
-│       └── 📜 auth.ts
-├── 📂 public/
-│   ├── 📜 notif.jpeg
-│   ├── 📜 profile.jpg
-│   └── 📜 vector.png
-├── 📂 types/
-│   └── 📜 index.ts
-├── 🐳 Dockerfile
-├── 📜 docker-compose.yml
-├── 📜 tailwind.config.js
-├── 📜 next.config.js
-├── 📜 .env.local
-└── 📜 README.md
+
 ⚙️ Installation & Setup
 1️⃣ Clone Repository
 bash
