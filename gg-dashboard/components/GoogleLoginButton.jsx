@@ -1,6 +1,7 @@
 'use client'
 
 import { createClient } from '../src/supabase/client'
+import React from "react";
 
 export default function GoogleLoginButton() {
   const handleLogin = async () => {

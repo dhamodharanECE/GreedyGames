@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import loginImage from '../public/login.png'
-import { useState, useEffect, useCallback } from 'react'
+import React,{ useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient  } from '../src/supabase/client/page'
 import Link from 'next/link'
