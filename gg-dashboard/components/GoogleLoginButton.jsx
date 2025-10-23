@@ -1,11 +1,12 @@
 // src/components/GoogleLoginButton.tsx
 'use client'
 
-import { createClient } from '../../gg-dashboard/src/supabase/client'
+import { createClient } from '../../gg-dashboard/src/supabase/client/page'
 import React from "react"
 
+// Remove /dashboard from BASE_URL
 // eslint-disable-next-line no-undef
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://greedy-games-plum.vercel.app/signup'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://greedy-games-plum.vercel.app'
 
 export default function GoogleLoginButton() {
   const handleLogin = async () => {
@@ -14,7 +15,7 @@ export default function GoogleLoginButton() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${BASE_URL}/auth/callback`, // Use env variable
+        redirectTo: `${BASE_URL}/auth/callback`,
       },
     })
 

@@ -8,16 +8,21 @@ export async function GET(req: Request) {
   const code = url.searchParams.get('code')
 
   if (!code) {
-    return NextResponse.redirect(new URL('/login?error=no_code', url.origin))
+    return NextResponse.redirect(new URL('/login?error=no_code', req.url))
   }
 
-  const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-  console.log(data)
-  if (error) {
-    console.error(error)
-    return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, url.origin))
-  }
+  try {
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (error) {
+      console.error('Auth callback error:', error)
+      return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, req.url))
+    }
 
-  // ✅ Use absolute URL for redirect
-  return NextResponse.redirect(new URL('/dashboard', url.origin))
+    return NextResponse.redirect(new URL('/dashboard', req.url))
+    
+  } catch (error) {
+    console.error('Unexpected error in auth callback:', error)
+    return NextResponse.redirect(new URL('/login?error=auth_failed', req.url))
+  }
 }
