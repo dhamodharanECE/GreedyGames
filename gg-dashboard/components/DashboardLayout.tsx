@@ -114,7 +114,7 @@ export default function Dashboard() {
     
     try {
       const { data: { session } } = await supabase.auth.getSession()
-      if (!session) router.replace('/login')
+      if (!session) router.replace('/signup')
       else setUser(session.user as User)
     } catch {
       router.replace('/login')
