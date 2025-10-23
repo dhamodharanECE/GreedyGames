@@ -53,7 +53,7 @@ Icons	Lucide React / Heroicons
 ⚙️ Installation & Setup
 1️⃣ Clone Repository
 bash
-git clone https://github.com/your-username/dashboard-app.git
+git clone https://github.com/dhamodharanECE/GreedyGames.git
 cd dashboard-app
 2️⃣ Install Dependencies
 bash
