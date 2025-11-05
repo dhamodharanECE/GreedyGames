@@ -1,11 +1,11 @@
-### 🔐 User Login and Signup with Authentication & Authorization
+<h1>🔐 User Login and Signup with Authentication & Authorization</h1>
+
 A modern Next.js 14+ dashboard with complete authentication system, featuring Supabase integration, Google Cloud OAuth, real-time notifications, and Docker deployment.
 
-🚀 Live Demo
-[Add your live demo link here]
+<h2>✨ Features</h2>
 
-✨ Features
-🔐 Authentication & Authorization
+<h3>🔐 Authentication & Authorization</h3>
+
 Supabase Email/Password Auth - Secure user registration and login
 
 Google Cloud OAuth 2.0 - Seamless social authentication
@@ -14,7 +14,8 @@ Protected Routes - Role-based access control
 
 Session Management - Persistent user sessions
 
-🧑‍💼 Dashboard & UI
+<h3>🧑‍💼 Dashboard & UI</h3>
+
 Modern Dashboard Layout - Sidebar navigation with topbar
 
 Responsive Design - Mobile-first Tailwind CSS design
@@ -23,7 +24,8 @@ Profile Management - User profile dropdown with settings
 
 Real-time Updates - Live data and state management
 
-🔔 Notifications System
+<h3>🔔 Notifications System</h3>
+
 Smart Notification Bell - Click to view recent notifications
 
 Double-click Navigation - Opens full notifications page
@@ -32,39 +34,60 @@ Notification Status - Track completed and pending actions
 
 Real-time Alerts - Instant notification updates
 
-🐳 Deployment & DevOps
+<h3>🐳 Deployment & DevOps</h3>
+
 Docker Containerization - Easy deployment with Docker
 
 Production Ready - Optimized for scalable deployment
 
 Environment Configuration - Secure environment variables
 
-🏗️ Tech Stack
+<h3>🏗️ Tech Stack</h3>
+
 Layer	Technology
+
 Frontend Framework	Next.js 14+ (App Router)
+
 Styling	Tailwind CSS
+
 Database & Auth	Supabase
+
 OAuth Provider	Google Cloud Platform
+
 Deployment	Docker
+
 Language	TypeScript
+
 State Management	React Context / Zustand
+
 Icons	Lucide React / Heroicons
 
-⚙️ Installation & Setup
+<h2>⚙️ Installation & Setup</h2>
+
 1️⃣ Clone Repository
+
 bash
 git clone https://github.com/dhamodharanECE/GreedyGames.git
+
 cd dashboard-app
+
 2️⃣ Install Dependencies
+
 bash
 npm install
-# or
-yarn install
-# or
-pnpm install
-3️⃣ Environment Configuration
-Create .env.local in your project root:
 
+# or
+
+yarn install
+
+# or
+
+pnpm install
+
+3️⃣ Environment Configuration
+
+Create .env.local in your project root:
+```base
 env
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -73,7 +96,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/936e5f25-1f36-47a9-9c2a-f56e1994f634" />
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/0d5e851e-453f-414a-aa3e-dc96e294a048" />
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/e0db6fa7-eed9-4231-a749-10f02f74a758" />
-
 
 
 # Google OAuth (Optional for local development)
@@ -88,8 +110,11 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-nextauth-secret
-4️⃣ Supabase Setup
+```
+<h2>4️⃣ Supabase Setup</h2>
+
 Step 1: Create Supabase Project
+
 Go to Supabase Dashboard
 
 Create a new project
@@ -97,6 +122,7 @@ Create a new project
 Get your SUPABASE_URL and SUPABASE_ANON_KEY
 
 Step 2: Configure Authentication
+
 Navigate to Authentication → Settings
 
 Configure your site URL: http://localhost:3000
@@ -106,8 +132,9 @@ Enable Email Provider
 Configure Redirect URLs
 
 Step 3: Database Schema (Optional)
-Set up your user profiles table in SQL:
 
+Set up your user profiles table in SQL:
+```base
 sql
 -- Create profiles table
 CREATE TABLE profiles (
@@ -129,8 +156,11 @@ CREATE POLICY "Users can view own profile" ON profiles
 
 CREATE POLICY "Users can update own profile" ON profiles
   FOR UPDATE USING (auth.uid() = id);
-5️⃣ Google OAuth Configuration
+```
+<h2>5️⃣ Google OAuth Configuration</h2>
+
 Step 1: Google Cloud Console
+
 Go to Google Cloud Console
 
 Create a new project or select existing one
@@ -142,16 +172,22 @@ Click Create Credentials → OAuth 2.0 Client ID
 Configure consent screen if required
 
 Step 2: Authorized URIs
+
 Authorized JavaScript origins:
 
 text
+
 http://localhost:3000
+
 Authorized redirect URIs:
 
 text
 https://your-project-ref.supabase.co/auth/v1/callback
+
 http://localhost:3000/auth/callback
+
 Step 3: Supabase Integration
+
 Go to Supabase Dashboard → Authentication → Providers
 
 Enable Google
@@ -160,8 +196,10 @@ Paste your Google Client ID and Secret
 
 Save configuration
 
-🧩 Notification System
+<h2>🧩 Notification System</h2>
+
 Notification Object Structure
+```base
 typescript
 interface Notification {
   id: number;
@@ -183,7 +221,9 @@ interface Notification {
   type: 'success',
   read: false
 }
-Notification Features
+```
+<h2>Notification Features</h2>
+
 Click: View recent notifications dropdown
 
 Double-click: Navigate to full notifications page
@@ -194,19 +234,30 @@ Mark as Read: Update notification status
 
 Real-time Updates: Live notification stream
 
-🧭 Navigation Guide
-Route	Description	Access
-/	Landing page	Public
-/auth/login	User login	Public
-/auth/signup	User registration	Public
-/dashboard	Main dashboard	Protected
-/dashboard/notification	Full notifications	Protected
-/dashboard/profile	User profile	Protected
-/dashboard/settings	Account settings	Protected
-🐳 Docker Deployment
-1️⃣ Docker Setup
-Create Dockerfile in project root:
+<h2>🧭 Navigation Guide</h2>
 
+Route	Description	Access
+
+/	Landing page	Public
+
+/auth/login	User login	Public
+
+/auth/signup	User registration	Public
+
+/dashboard	Main dashboard	Protected
+
+/dashboard/notification	Full notifications	Protected
+
+/dashboard/profile	User profile	Protected
+
+/dashboard/settings	Account settings	Protected
+
+<h2>🐳 Docker Deployment</h2>
+
+1️⃣ Docker Setup
+
+Create Dockerfile in project root:
+```base
 dockerfile
 # Use official Node.js runtime
 FROM node:18-alpine
@@ -259,21 +310,35 @@ docker run -p 3000:3000 dashboard-app
 
 # Or use Docker Compose
 docker-compose up -d
+```
+
 Your app will be available at: http://localhost:3000
 
-🛠️ Available Scripts
+<h2>🛠️ Available Scripts</h2>
+
 Command	Description
+
 npm run dev	Start development server
+
 npm run build	Build for production
+
 npm start	Start production server
+
 npm run lint	Run ESLint
+
 npm run type-check	Run TypeScript compiler
+
 docker build -t dashboard-app .	Build Docker image
+
 docker run -p 3000:3000 dashboard-app	Run container
-🔧 Configuration
+
+<h2>🔧 Configuration</h2>
+
 Tailwind CSS
+
 The project uses Tailwind CSS for styling. Configuration can be modified in tailwind.config.js:
 
+```base
 javascript
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -310,8 +375,11 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-🚀 Deployment
+```
+<h2>🚀 Deployment</h2>
+
 Vercel Deployment (Recommended)
+
 Push your code to GitHub
 
 Connect your repository to Vercel
@@ -346,7 +414,9 @@ npm run test:coverage
 
 # Run e2e tests
 npm run test:e2e
-🤝 Contributing
+
+<h2>🤝 Contributing</h2>
+
 Fork the project
 
 Create your feature branch (git checkout -b feature/AmazingFeature)
@@ -358,6 +428,7 @@ Push to the branch (git push origin feature/AmazingFeature)
 Open a Pull Request
 
 Development Guidelines
+
 Follow TypeScript best practices
 
 Use meaningful commit messages
@@ -368,8 +439,10 @@ Update documentation accordingly
 
 Follow the existing code style
 
-🐛 Troubleshooting
+<h2>🐛 Troubleshooting</h2>
+
 Common Issues
+
 Authentication Errors
 
 Verify Supabase environment variables
@@ -395,6 +468,7 @@ Check port availability
 Verify Dockerfile syntax
 
 Getting Help
+
 Check Supabase Documentation
 
 Review Next.js Documentation
@@ -403,7 +477,7 @@ Create an issue on GitHub
 
 Check existing discussions
 
-👨‍💻 Author
+<h2>👨‍💻 Author</h2>
 Dhamodharan S
 Full Stack Developer Intern
 
@@ -413,7 +487,5 @@ Full Stack Developer Intern
 
 🐙 GitHub: https://github.com/dhamodharanECE
 
-🌐 Portfolio: [Add your portfolio link]
-
-📄 License
+<h2>📄 License</h2>
 This project is licensed under the MIT License - see the LICENSE file for details.
