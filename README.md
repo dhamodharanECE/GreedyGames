@@ -90,16 +90,23 @@ Create .env.local in your project root:
 ```base
 env
 # Supabase Configuration
+
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/e10ab9de-ac34-4850-8837-744b77bb8459" />
+
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/936e5f25-1f36-47a9-9c2a-f56e1994f634" />
+
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/0d5e851e-453f-414a-aa3e-dc96e294a048" />
+
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/e0db6fa7-eed9-4231-a749-10f02f74a758" />
 
-
 # Google OAuth (Optional for local development)
+
 GOOGLE_CLIENT_ID=your-google-client-id
+
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/195ddc0c-b8f9-46c6-b6f0-7cfcca5d055a" />
@@ -109,6 +116,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/b862a1f4-875a-411b-af67-eb9302531c82" />
 
 NEXTAUTH_URL=http://localhost:3000
+
 NEXTAUTH_SECRET=your-nextauth-secret
 ```
 <h2>4️⃣ Supabase Setup</h2>
@@ -340,6 +348,7 @@ The project uses Tailwind CSS for styling. Configuration can be modified in tail
 
 ```base
 javascript
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -389,6 +398,7 @@ Add environment variables in Vercel dashboard
 Deploy automatically
 
 Other Platforms
+
 The app can be deployed on:
 
 Netlify
@@ -402,17 +412,22 @@ Digital Ocean App Platform
 Any platform supporting Node.js
 
 🧪 Testing
+
 bash
 # Run tests
+
 npm test
 
 # Run tests in watch mode
+
 npm run test:watch
 
 # Run tests with coverage
+
 npm run test:coverage
 
 # Run e2e tests
+
 npm run test:e2e
 
 <h2>🤝 Contributing</h2>
@@ -483,13 +498,11 @@ Check existing discussions
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/89769e2a-bea8-48f7-a4a2-c04952c01923" />
 
-   
 2. Login Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/3a51f4fb-c605-4aaf-8e9c-1cb428085a11" />
 
-
-4. Dashboard Page:
+3. Dashboard Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/aaff0064-fbbb-41f4-8fd2-c27ef15f8ebb" />
 
@@ -497,26 +510,21 @@ Check existing discussions
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/8795ac28-8007-4747-befb-3ac15b223bdc" />
 
-
 5. Prfile Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/72565916-71ed-4077-abcc-3f4bf1a29730" />
-
 
 6. Todo List Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/2c3724f8-d67b-4765-ab2c-7b9e7ca3f0c9" />
 
-
 7. Todo List Sorting Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/ea1715d8-1e76-462d-bc62-9e8cb74fb2b9" />
 
-
 8. Todo List Editing Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/34f0c3ec-fb49-4f60-b71e-8871a79339b0" />
-
 
 9. Notification Page:
 
