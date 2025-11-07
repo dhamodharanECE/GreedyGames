@@ -551,8 +551,7 @@ Full Stack Developer Intern
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-<h2>>🧩 Deployment Link:</h2>
-
+<h2>🧩 Deployment Link:</h2>
 
 ```base
 https://greedy-games-plum.vercel.app/
