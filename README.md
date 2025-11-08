@@ -502,46 +502,54 @@ Check existing discussions
 
 <h2>UI Implementation</h2>
 
-SignUp Page:
+# SignUp Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/89769e2a-bea8-48f7-a4a2-c04952c01923" />
 
-Login Page:
+
+# Login Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/3a51f4fb-c605-4aaf-8e9c-1cb428085a11" />
 
-Dashboard Page:
+
+# Dashboard Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/aaff0064-fbbb-41f4-8fd2-c27ef15f8ebb" />
 
-Side Bar Page:
+
+# Side Bar Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/8795ac28-8007-4747-befb-3ac15b223bdc" />
 
-Prfile Page:
+
+# Prfile Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/72565916-71ed-4077-abcc-3f4bf1a29730" />
 
-Todo List Page:
+
+# Todo List Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/2c3724f8-d67b-4765-ab2c-7b9e7ca3f0c9" />
 
-Todo List Sorting Page:
+
+#Todo List Sorting Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/ea1715d8-1e76-462d-bc62-9e8cb74fb2b9" />
 
-Todo List Editing Page:
+
+# Todo List Editing Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/34f0c3ec-fb49-4f60-b71e-8871a79339b0" />
 
-Notification Page:
+
+# Notification Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/1132cc51-ec98-4fc8-9a0e-8d528acdf9c3" />
 
-Profile & Logout:
+
+# Profile & Logout:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/67af3465-263c-4369-b254-03938a1eb291" />
-
 
 <h2>👨‍💻 Author</h2>
 
