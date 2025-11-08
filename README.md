@@ -67,8 +67,10 @@ Icons	Lucide React / Heroicons
 1️⃣ Clone Repository
 
 bash
-git clone https://github.com/dhamodharanECE/GreedyGames.git
-
+git clone 
+```base
+https://github.com/dhamodharanECE/GreedyGames.git
+```
 cd dashboard-app
 
 2️⃣ Install Dependencies
@@ -133,8 +135,10 @@ Step 2: Configure Authentication
 
 Navigate to Authentication → Settings
 
-Configure your site URL: http://localhost:3000
-
+Configure your site URL: 
+```base
+http://localhost:3000
+```
 Enable Email Provider
 
 Configure Redirect URLs
@@ -184,16 +188,18 @@ Step 2: Authorized URIs
 Authorized JavaScript origins:
 
 text
-
+```base
 http://localhost:3000
-
+```
 Authorized redirect URIs:
 
 text
+```base
 https://your-project-ref.supabase.co/auth/v1/callback
-
+```
+```
 http://localhost:3000/auth/callback
-
+```
 Step 3: Supabase Integration
 
 Go to Supabase Dashboard → Authentication → Providers
@@ -320,8 +326,10 @@ docker run -p 3000:3000 dashboard-app
 docker-compose up -d
 ```
 
-Your app will be available at: http://localhost:3000
-
+Your app will be available at: 
+```
+http://localhost:3000
+```
 <h2>🛠️ Available Scripts</h2>
 
 Command	Description
@@ -543,10 +551,13 @@ Full Stack Developer Intern
 
 📧 Email: dhamodharansece23@gmail.com
 
-💼 LinkedIn: https://www.linkedin.com/in/dhamodharan-s-web-designer
-
+💼 LinkedIn: 
+```
+https://www.linkedin.com/in/dhamodharan-s-web-designer
+```
+```
 🐙 GitHub: https://github.com/dhamodharanECE
-
+```
 <h2>📄 License</h2>
 
 This project is licensed under the MIT License - see the LICENSE file for details.
