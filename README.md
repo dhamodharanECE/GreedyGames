@@ -549,15 +549,21 @@ Dhamodharan S
 
 Full Stack Developer Intern
 
-📧 Email: dhamodharansece23@gmail.com
+📧 Email: 
+```
+dhamodharansece23@gmail.com
+```
 
 💼 LinkedIn: 
 ```
 https://www.linkedin.com/in/dhamodharan-s-web-designer
 ```
+
+🐙 GitHub:
 ```
-🐙 GitHub: https://github.com/dhamodharanECE
+https://github.com/dhamodharanECE
 ```
+
 <h2>📄 License</h2>
 
 This project is licensed under the MIT License - see the LICENSE file for details.
