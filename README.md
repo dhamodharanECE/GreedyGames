@@ -1,10 +1,10 @@
-<h1>🔐 User Login and Signup with Authentication & Authorization</h1>
+#   🔐 User Login and Signup with Authentication & Authorization
 
 A modern Next.js 14+ dashboard with complete authentication system, featuring Supabase integration, Google Cloud OAuth, real-time notifications, and Docker deployment.
 
-<h2>✨ Features</h2>
+#  ✨ Features
 
-<h3>🔐 Authentication & Authorization</h3>
+# 🔐 Authentication & Authorization
 
 Supabase Email/Password Auth - Secure user registration and login
 
@@ -14,7 +14,7 @@ Protected Routes - Role-based access control
 
 Session Management - Persistent user sessions
 
-<h3>🧑‍💼 Dashboard & UI</h3>
+# 🧑‍💼 Dashboard & UI
 
 Modern Dashboard Layout - Sidebar navigation with topbar
 
@@ -24,7 +24,7 @@ Profile Management - User profile dropdown with settings
 
 Real-time Updates - Live data and state management
 
-<h3>🔔 Notifications System</h3>
+# 🔔 Notifications System
 
 Smart Notification Bell - Click to view recent notifications
 
@@ -34,7 +34,7 @@ Notification Status - Track completed and pending actions
 
 Real-time Alerts - Instant notification updates
 
-<h3>🐳 Deployment & DevOps</h3>
+# 🐳 Deployment & DevOps
 
 Docker Containerization - Easy deployment with Docker
 
@@ -42,7 +42,7 @@ Production Ready - Optimized for scalable deployment
 
 Environment Configuration - Secure environment variables
 
-<h3>🏗️ Tech Stack</h3>
+# 🏗️ Tech Stack
 
 Layer	Technology
 
@@ -62,36 +62,37 @@ State Management	React Context / Zustand
 
 Icons	Lucide React / Heroicons
 
-<h2>⚙️ Installation & Setup</h2>
+#  ⚙️ Installation & Setup
 
 1️⃣ Clone Repository
 
 bash
 git clone 
 ```base
-https://github.com/dhamodharanECE/GreedyGames.git
+git clone https://github.com/dhamodharanECE/GreedyGames.git
 ```
 cd dashboard-app
 
 2️⃣ Install Dependencies
 
 bash
+```
 npm install
-
-# or
-
+```
+#   or
+```
 yarn install
-
-# or
-
+```
+#   or
+```
 pnpm install
-
+```
 3️⃣ Environment Configuration
 
 Create .env.local in your project root:
 ```base
 env
-# Supabase Configuration
+#   Supabase Configuration
 
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 
@@ -105,7 +106,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/e0db6fa7-eed9-4231-a749-10f02f74a758" />
 
-# Google OAuth (Optional for local development)
+#   Google OAuth (Optional for local development)
 
 GOOGLE_CLIENT_ID=your-google-client-id
 
@@ -113,7 +114,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/195ddc0c-b8f9-46c6-b6f0-7cfcca5d055a" />
 
-# Next.js Configuration
+#   Next.js Configuration
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/b862a1f4-875a-411b-af67-eb9302531c82" />
 
@@ -121,7 +122,8 @@ NEXTAUTH_URL=http://localhost:3000
 
 NEXTAUTH_SECRET=your-nextauth-secret
 ```
-<h2>4️⃣ Supabase Setup</h2>
+
+#  4️⃣ Supabase Setup
 
 Step 1: Create Supabase Project
 
@@ -169,7 +171,7 @@ CREATE POLICY "Users can view own profile" ON profiles
 CREATE POLICY "Users can update own profile" ON profiles
   FOR UPDATE USING (auth.uid() = id);
 ```
-<h2>5️⃣ Google OAuth Configuration</h2>
+#  5️⃣ Google OAuth Configuration
 
 Step 1: Google Cloud Console
 
@@ -210,7 +212,7 @@ Paste your Google Client ID and Secret
 
 Save configuration
 
-<h2>🧩 Notification System</h2>
+#  🧩 Notification System
 
 Notification Object Structure
 ```base
@@ -236,7 +238,7 @@ interface Notification {
   read: false
 }
 ```
-<h2>Notification Features</h2>
+#  Notification Features
 
 Click: View recent notifications dropdown
 
@@ -248,7 +250,7 @@ Mark as Read: Update notification status
 
 Real-time Updates: Live notification stream
 
-<h2>🧭 Navigation Guide</h2>
+#  🧭 Navigation Guide
 
 Route	Description	Access
 
@@ -266,36 +268,36 @@ Route	Description	Access
 
 /dashboard/settings	Account settings	Protected
 
-<h2>🐳 Docker Deployment</h2>
+#  🐳 Docker Deployment
 
 1️⃣ Docker Setup
 
 Create Dockerfile in project root:
 ```base
 dockerfile
-# Use official Node.js runtime
+#   Use official Node.js runtime
 FROM node:18-alpine
 
-# Set working directory
+#   Set working directory
 WORKDIR /app
 
-# Copy package files
+#   Copy package files
 COPY package*.json ./
 COPY yarn.lock ./
 
-# Install dependencies
+#   Install dependencies
 RUN npm ci --only=production
 
-# Copy source code
+#   Copy source code
 COPY . .
 
-# Build the application
+#   Build the application
 RUN npm run build
 
-# Expose port
+#   Expose port
 EXPOSE 3000
 
-# Start the application
+#   Start the application
 CMD ["npm", "start"]
 2️⃣ Docker Compose (Optional)
 Create docker-compose.yml:
@@ -316,13 +318,13 @@ services:
     restart: unless-stopped
 3️⃣ Build and Run
 bash
-# Build Docker image
+#   Build Docker image
 docker build -t dashboard-app .
 
-# Run container
+#   Run container
 docker run -p 3000:3000 dashboard-app
 
-# Or use Docker Compose
+#   Or use Docker Compose
 docker-compose up -d
 ```
 
@@ -330,7 +332,7 @@ Your app will be available at:
 ```
 http://localhost:3000
 ```
-<h2>🛠️ Available Scripts</h2>
+#  🛠️ Available Scripts
 
 Command	Description
 
@@ -348,7 +350,7 @@ docker build -t dashboard-app .	Build Docker image
 
 docker run -p 3000:3000 dashboard-app	Run container
 
-<h2>🔧 Configuration</h2>
+#  🔧 Configuration
 
 Tailwind CSS
 
@@ -368,9 +370,9 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          500: '#3b82f6',
-          600: '#2563eb',
+          50: '#  eff6ff',
+          500: '#  3b82f6',
+          600: '#  2563eb',
         },
       },
     },
@@ -393,7 +395,7 @@ const nextConfig = {
 
 module.exports = nextConfig
 ```
-<h2>🚀 Deployment</h2>
+#  🚀 Deployment
 
 Vercel Deployment (Recommended)
 
@@ -419,26 +421,26 @@ Digital Ocean App Platform
 
 Any platform supporting Node.js
 
-🧪 Testing
+# 🧪 Testing
 
 bash
-# Run tests
-
+#   Run tests
+```
 npm test
-
-# Run tests in watch mode
+```
+#   Run tests in watch mode
 
 npm run test:watch
 
-# Run tests with coverage
+#   Run tests with coverage
 
 npm run test:coverage
 
-# Run e2e tests
+#   Run e2e tests
 
 npm run test:e2e
 
-<h2>🤝 Contributing</h2>
+#  🤝 Contributing
 
 Fork the project
 
@@ -462,7 +464,7 @@ Update documentation accordingly
 
 Follow the existing code style
 
-<h2>🐛 Troubleshooting</h2>
+#  🐛 Troubleshooting
 
 Common Issues
 
@@ -500,58 +502,58 @@ Create an issue on GitHub
 
 Check existing discussions
 
-<h2>UI Implementation</h2>
+#  UI Implementation
 
-# SignUp Page:
+#   SignUp Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/89769e2a-bea8-48f7-a4a2-c04952c01923" />
 
 
-# Login Page:
+#   Login Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/3a51f4fb-c605-4aaf-8e9c-1cb428085a11" />
 
 
-# Dashboard Page:
+#   Dashboard Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/aaff0064-fbbb-41f4-8fd2-c27ef15f8ebb" />
 
 
-# Side Bar Page:
+#   Side Bar Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/8795ac28-8007-4747-befb-3ac15b223bdc" />
 
 
-# Prfile Page:
+#   Prfile Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/72565916-71ed-4077-abcc-3f4bf1a29730" />
 
 
-# Todo List Page:
+#   Todo List Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/2c3724f8-d67b-4765-ab2c-7b9e7ca3f0c9" />
 
 
-#Todo List Sorting Page:
+#  Todo List Sorting Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/ea1715d8-1e76-462d-bc62-9e8cb74fb2b9" />
 
 
-# Todo List Editing Page:
+#   Todo List Editing Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/34f0c3ec-fb49-4f60-b71e-8871a79339b0" />
 
 
-# Notification Page:
+#   Notification Page:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/1132cc51-ec98-4fc8-9a0e-8d528acdf9c3" />
 
 
-# Profile & Logout:
+#   Profile & Logout:
 
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/67af3465-263c-4369-b254-03938a1eb291" />
 
-<h2>👨‍💻 Author</h2>
+#  👨‍💻 Author
 
 Dhamodharan S
 
@@ -572,11 +574,11 @@ https://www.linkedin.com/in/dhamodharan-s-web-designer
 https://github.com/dhamodharanECE
 ```
 
-<h2>📄 License</h2>
+#  📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-<h2>🧩 Deployment Link:</h2>
+#  🧩 Deployment Link:
 
 ```base
 https://greedy-games-plum.vercel.app/
